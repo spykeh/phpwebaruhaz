@@ -3,7 +3,8 @@
 	Üdvözöljük
 	<?php
 	if (isset($_SESSION['user'])){
-		echo $_SESSION['user'] . '!';
+		echo $_SESSION['user'] . '!<br>';
+		echo '<a href="logout.php">Kilépés</a><br>';
 	}else{
 		echo 'Vendég!<br>';
 		echo '<a href="register.php">Regisztráció</a><br>';
@@ -13,7 +14,7 @@
 	?>
 	</div>
 	<div class="kosar">
-	Kosár	
+	<a href="kosar.php">Kosár <?php echo '(' . count($_SESSION['kosar']) . ')';?></a>	
 	</div>	
 	<div class="menusor">
 		<ul>

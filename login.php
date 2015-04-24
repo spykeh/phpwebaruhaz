@@ -16,15 +16,23 @@ require 'loginform.php';
 ?>
 
 <?php
-if(isset($_POST['nev'])&&isset($_POST['jelszo'])){
+if(isset($_POST['felhnev'])&&isset($_POST['jelszo'])){
 	$username = $_POST['felhnev'];
 	$password = $_POST['jelszo'];
+	$query = "SELECT F_ID, JELSZO FROM FELHASZNALO WHERE FELHASZNALONEV = '" . $username . "'";
 
-	if(!empty($username)&& !empty ($password) ){
-		echo 'Belépés még nincs implementálva';
-	}else{
-		echo 'Kérjük töltse ki a mezőket!';
+	$stid = oci_parse($conn, $query);
+	oci_execute($stid);
+	
+	while (oci_fetch($stid)) {
+		if($password != oci_result($stid, 'JELSZO')){
+			echo 'Hibás felhasználónév vagy jelszó';
+		}else{
+			$_SESSION['user'] = $username;
+			header('Location: index.php'); 
+		}
 	}
+	
 }
 ?>
 </div>

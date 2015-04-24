@@ -1,4 +1,4 @@
-<div id="regform">
+
 	<form action=<?php echo $current_file; ?> method="POST" align="center">
 		Teljes név:*<br>
 		<input type="text" name="teljesnev"><br>
@@ -19,4 +19,3 @@
 		
 		<input type="submit" value="Regisztracio"><br>
 	</form>
-</div>

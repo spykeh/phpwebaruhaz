@@ -28,22 +28,20 @@ if(isset($_GET['p'])){
 	$platform = $_GET['p'];
 }
 
+
 if(isset($_GET['p']) && isset($_GET['t'])){
 	switch ($tipus) {
 		case 0:
-			$tipusDBName = "KONZOL";
 			$tipusText = "Gépek";
 			break;
 		case 1:
-			$tipusDBName = "JATEK";
 			$tipusText = "Játékok";
 			break;
 		case 2:
-			$tipusDBName = "TARTOZEK";
 			$tipusText = "Tartozékok";
 			break;
 	}
-	$querytext = 'SELECT * FROM '. $tipusDBName .' where PLATFORM = ' . $platform;
+	$querytext = 'SELECT * FROM TERMEKLISTA where PLATFORM = ' . $platform . ' AND K_ID = ' . $tipus;
 }else{
 	echo 'hiba';
 }
@@ -85,7 +83,7 @@ while (oci_fetch($stid)) {
 				echo '</div></div>'. "\n";
 				echo '<div class="termekcol">'. "\n";
 				echo '<div class="termekbox">'. "\n";
-				echo '<div id="kosarba">Kosárba</div>';
+				echo '<div id="kosarba"><a href="kosarba.php?id=' . oci_result($stid, 'T_ID') . '">Kosárba</a></div>';
 			}else{
 				echo '<i>Nincs készleten</i>';
 			}
