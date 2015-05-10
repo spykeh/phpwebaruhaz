@@ -29,7 +29,9 @@ if(isset($_GET['p'])){
 }
 
 
+
 if(isset($_GET['p']) && isset($_GET['t'])){
+	$link = 'termekek.php?p=' . $_GET['p'] . '&t=' . $_GET['t'];
 	switch ($tipus) {
 		case 0:
 			$tipusText = "Gépek";
@@ -42,9 +44,26 @@ if(isset($_GET['p']) && isset($_GET['t'])){
 			break;
 	}
 	$querytext = 'SELECT * FROM TERMEKLISTA where PLATFORM = ' . $platform . ' AND K_ID = ' . $tipus;
+	if(isset($_GET['s']) && isset($_GET['h'])){
+		$rendezes = $_GET['s']; 
+		$hogyan = $_GET['h']; //ASC, DESC
+		if($rendezes==1){ //NÉV szerinti rendezés
+			$querytext = $querytext . ' ORDER BY NEV ' . $hogyan;
+		}else if($rendezes==2){ // ÁR szerinti rendezés
+			$querytext = $querytext . ' ORDER BY AR ' . $hogyan;
+		}else{ //népszerűség szerinti rendezés
+			$querytext = 'SELECT TERMEKLISTA.T_ID, TERMEKLISTA.NEV, TERMEKLISTA.PLATFORM, TERMEKLISTA.MEGJELENES, TERMEKLISTA.KESZLET, TERMEKLISTA.GYARTO, TERMEKLISTA.AR, TERMEKLISTA.K_ID, COUNT(VASARLAS.T_ID) AS darab
+							FROM TERMEKLISTA LEFT JOIN VASARLAS
+							ON TERMEKLISTA.T_ID = VASARLAS.T_ID
+							WHERE PLATFORM = ' . $platform . ' AND K_ID = ' . $tipus . 
+							'GROUP BY TERMEKLISTA.T_ID, TERMEKLISTA.NEV, TERMEKLISTA.PLATFORM, TERMEKLISTA.MEGJELENES, TERMEKLISTA.KESZLET, TERMEKLISTA.GYARTO, TERMEKLISTA.AR, TERMEKLISTA.K_ID
+							ORDER BY darab ' . $hogyan;
+		}
+	}
 }else{
 	echo 'hiba';
 }
+
 
 $query2 = 'SELECT NEV FROM PLATFORM where P_ID = ' . $platform;
 
@@ -61,6 +80,29 @@ while (oci_fetch($stid)) {
 <br>
 <center><h1><?php echo $platformText . ' ' .$tipusText;?></h1></center>
 <br>
+
+<center>Rendezés <a href="<?php
+	if(isset($_GET['h']) && $_GET['h']=="ASC"){
+		echo $link . '&s=1&h=DESC';
+	}else{
+		echo $link . '&s=1&h=ASC';
+	}
+	?>">Név</a> | 
+<a href="<?php
+	if(isset($_GET['h']) && $_GET['h']=="ASC"){
+		echo $link . '&s=2&h=DESC';
+	}else{
+		echo $link . '&s=2&h=ASC';
+	}
+	?>">Ár</a> | 
+<a href="<?php
+	if(isset($_GET['h']) && $_GET['h']=="DESC"){
+		echo $link . '&s=3&h=ASC';
+	}else{
+		echo $link . '&s=3&h=DESC';
+	}
+	?>">Népszerűség</a>
+</center>
 
 <?php
 $stid = oci_parse($conn, $querytext);

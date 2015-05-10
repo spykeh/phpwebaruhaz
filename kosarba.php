@@ -5,4 +5,7 @@
 	}
 	
 	array_push($_SESSION['kosar'], $_GET['id']);
+	header('Location: index.php'); 
+	
+	
 ?>

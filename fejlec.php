@@ -14,7 +14,13 @@
 	?>
 	</div>
 	<div class="kosar">
-	<a href="kosar.php">Kosár <?php echo '(' . count($_SESSION['kosar']) . ')';?></a>	
+	<a href="kosar.php">Kosár 
+		<?php
+			if(isset($_SESSION['kosar'])){
+				echo '(' . count($_SESSION['kosar']) . ')';
+			}
+		?>
+	</a>	
 	</div>	
 	<div class="menusor">
 		<ul>
